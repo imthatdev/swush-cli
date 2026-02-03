@@ -191,7 +191,12 @@ async function upload(filePath) {
     console.error("Upload failed", data);
     process.exit(1);
   }
-  console.log(JSON.stringify(data, null, 2));
+  const shortUrl = data?.url || data?.data?.url;
+  if (shortUrl) {
+    console.log(`Successfully shortened: ${shortUrl}`);
+  } else {
+    console.log("Successfully shortened.");
+  }
 }
 
 // Create a short link via /api/v1/shorten
@@ -210,7 +215,15 @@ async function shorten(url) {
     console.error("Shorten failed", data);
     process.exit(1);
   }
-  console.log(JSON.stringify(data, null, 2));
+  const uploadedUrl = data?.url || data?.data?.url;
+  if (uploadedUrl) {
+    console.log(`Uploaded successfully: ${uploadedUrl}`);
+  } else {
+    const uploadedId = data?.id || data?.data?.id;
+    console.log(
+      `Uploaded successfully${uploadedId ? ` (id: ${uploadedId})` : ""}.`,
+    );
+  }
 }
 
 // List uploads via /api/v1/upload
@@ -223,7 +236,18 @@ async function listUploads() {
     console.error("List failed", data);
     process.exit(1);
   }
-  console.log(JSON.stringify(data, null, 2));
+  const items = Array.isArray(data?.data)
+    ? data.data
+    : Array.isArray(data)
+      ? data
+      : [];
+  if (items.length > 0) {
+    console.log(
+      `Listed ${items.length} upload${items.length === 1 ? "" : "s"}.`,
+    );
+  } else {
+    console.log("Listed uploads.");
+  }
 }
 
 // Command routing
