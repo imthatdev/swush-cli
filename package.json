@@ -1,0 +1,49 @@
+{
+  "name": "@iconical/swush",
+  "version": "1.0.0",
+  "description": "Swush CLI for uploads and links",
+  "author": {
+    "name": "Laith (Iconical)",
+    "email": "him@iconical.dev",
+    "url": "https://iconical.dev"
+  },
+  "license": "Apache-2.0",
+  "bin": {
+    "swush": "./swush.js"
+  },
+  "files": [
+    "swush.js",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "swush",
+    "cli",
+    "uploads",
+    "shortlinks"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imthatdev/swush"
+  },
+  "bugs": {
+    "url": "https://github.com/imthatdev/swush/issues"
+  },
+  "homepage": "https://iconical.dev/swush",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/imthatdev"
+    },
+    {
+      "type": "buymeacoffee",
+      "url": "https://buymeacoffee.com/iconical"
+    },
+    {
+      "type": "url",
+      "url": "https://iconical.dev/sponsor"
+    }
+  ]
+}
