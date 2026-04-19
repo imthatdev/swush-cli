@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*
  *   Copyright (c) 2026 Laith Alkhaddam aka Iconical.
  *   All rights reserved.
@@ -17,7 +15,32 @@
  *   limitations under the License.
  */
 
-import { runCli } from "./src/index.js";
+import crypto from "node:crypto";
+import os from "node:os";
 
-const exitCode = await runCli(process.argv.slice(2));
-process.exit(exitCode);
+export function getDeviceFingerprint() {
+  let username = process.env.USER || process.env.USERNAME || "unknown-user";
+  try {
+    const info = os.userInfo();
+    if (info?.username) username = info.username;
+  } catch {
+    // Ignore OS user lookup failures.
+  }
+
+  const parts = [
+    os.hostname() || "unknown-host",
+    os.platform(),
+    os.arch(),
+    username,
+    os.release(),
+  ];
+
+  const raw = parts.join("|");
+  const hash = crypto.createHash("sha256").update(raw).digest("hex");
+
+  return {
+    raw,
+    hash,
+    label: `${os.hostname()} (${os.platform()}/${os.arch()})`,
+  };
+}

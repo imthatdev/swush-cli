@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*
  *   Copyright (c) 2026 Laith Alkhaddam aka Iconical.
  *   All rights reserved.
@@ -17,7 +15,9 @@
  *   limitations under the License.
  */
 
-import { runCli } from "./src/index.js";
+import { installCompletion } from "../completion/install.js";
 
-const exitCode = await runCli(process.argv.slice(2));
-process.exit(exitCode);
+export async function runCommand({ flags, output }) {
+  installCompletion(flags.shell, output);
+  return { history: null };
+}

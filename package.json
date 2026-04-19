@@ -1,25 +1,28 @@
 {
   "name": "@iconical/swush",
-  "version": "1.0.1",
-  "description": "Swush CLI for uploads and links",
+  "version": "1.1.0",
+  "description": "Swush CLI for features and management.",
+  "type": "module",
   "author": {
     "name": "Laith (Iconical)",
     "email": "him@iconical.dev",
     "url": "https://iconical.dev"
   },
   "scripts": {
-    "generate:tag": "git tag -s v$(node -p 'require(\"./package.json\").version') -m \"tag: v$(node -p 'require(\"./package.json\").version') release\"",
-    "push:git": "git push && git push --follow-tags",
+    "tag:generate": "git tag -s v$(node -p 'require(\"./package.json\").version') -m \"tag: v$(node -p 'require(\"./package.json\").version') release\"",
+    "git:push": "git push && git push --follow-tags",
     "version:major": "npm version major --no-git-tag-version",
     "version:minor": "npm version minor --no-git-tag-version",
     "version:patch": "npm version patch --no-git-tag-version"
   },
   "license": "Apache-2.0",
   "bin": {
-    "swush": "./swush.js"
+    "swush": "swush.js",
+    "swu": "swush.js"
   },
   "files": [
     "swush.js",
+    "src",
     "README.md"
   ],
   "engines": {
@@ -33,12 +36,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/imthatdev/swush"
+    "url": "git+https://github.com/imthatdev/swush.git"
   },
   "bugs": {
     "url": "https://github.com/imthatdev/swush/issues"
   },
-  "homepage": "https://iconical.dev/swush",
+  "homepage": "https://swush.app",
   "funding": [
     {
       "type": "github",

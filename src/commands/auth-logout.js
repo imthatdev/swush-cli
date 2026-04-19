@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*
  *   Copyright (c) 2026 Laith Alkhaddam aka Iconical.
  *   All rights reserved.
@@ -17,7 +15,8 @@
  *   limitations under the License.
  */
 
-import { runCli } from "./src/index.js";
-
-const exitCode = await runCli(process.argv.slice(2));
-process.exit(exitCode);
+export async function runCommand({ output, sessionManager }) {
+  await sessionManager.logoutSession();
+  output.success("Session cleared from local secure storage.");
+  return { history: null };
+}

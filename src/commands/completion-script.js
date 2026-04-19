@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*
  *   Copyright (c) 2026 Laith Alkhaddam aka Iconical.
  *   All rights reserved.
@@ -17,7 +15,18 @@
  *   limitations under the License.
  */
 
-import { runCli } from "./src/index.js";
+import { SwushCliError } from "../core/errors.js";
+import { generateCompletionScript } from "../completion/scripts.js";
 
-const exitCode = await runCli(process.argv.slice(2));
-process.exit(exitCode);
+export async function runCommand({ flags, output }) {
+  const shell = flags.shell;
+  if (!shell) {
+    throw new SwushCliError("Missing --shell for completion script output.", {
+      code: "SWUSH_SHELL_REQUIRED",
+      hint: "Use: swush completion script --shell zsh|bash|fish",
+    });
+  }
+
+  output.log(generateCompletionScript(shell));
+  return { history: null };
+}

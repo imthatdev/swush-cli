@@ -1,6 +1,15 @@
-# Swush CLI
+# Swush CLI (Zero-Trust)
 
-A minimal CLI for Swush (Node 18+).
+Swush CLI is a secure-by-design command-line client for Swush.
+
+## Highlights
+
+- Zero-trust command gate: every protected command validates auth state before execution.
+- Security-first sessions: refresh token in OS keychain (encrypted fallback), short-lived validation cache.
+- Device-auth login flow or manual API-key login.
+- Command and flag completion with context-aware suggestions.
+- Shell support: zsh, bash, fish.
+- Aliases: `swush` and `swu`.
 
 ## Install
 
@@ -8,51 +17,91 @@ A minimal CLI for Swush (Node 18+).
 npm i -g @iconical/swush
 ```
 
-Or from the repo:
+From repo:
 
 ```bash
 cd cli
 npm link
 ```
 
-## Usage
+## Quick Start
 
 ```bash
-swush login -u https://your.domain -a API_TOKEN
-swush status
-swush logout
-swush upload -p /path/to/file
-swush shorten -t https://example.com
-swush list
-swush help
+swush auth login --url https://your.domain
+swush upload file ./photo.png
+swush shorten link https://example.com
+swush bookmark add https://example.com
 ```
+
+## Command Model
+
+Pattern:
+
+```bash
+swush <action> <resource> [flags]
+```
+
+Legacy aliases are preserved:
+
+- `swush login` -> `swush auth login`
+- `swush logout` -> `swush auth logout`
+- `swush status` -> `swush auth status`
+- `swush upload` -> `swush upload file`
+- `swush shorten` -> `swush shorten link`
+- `swush list` -> `swush list uploads`
 
 ## Commands
 
-- `login` save API token + URL locally
-- `status` show saved config status
-- `logout` clear saved config
-- `upload` upload a file
-- `shorten` create a short link
-- `list` list uploads
-- `help` show command list
+- `swush auth login [--url <url>] [--api-key <token>]`
+- `swush auth logout`
+- `swush auth status`
+- `swush upload file <path> [--private]`
+- `swush shorten link <url> [--private] [--slug <slug>] [--expiry <iso>]`
+- `swush bookmark add <url> [--title <text>] [--private]`
+- `swush list uploads [--limit <n>] [--offset <n>]`
+- `swush completion install [--shell zsh|bash|fish]`
+- `swush completion script --shell zsh|bash|fish`
 
-### Flags
+## Completion
 
-- `-a`, `--api-key` (required for login, optional if already logged in)
-- `-u`, `--url` (optional, defaults to `SWUSH_URL`, `APP_URL`, or `http://localhost:3000`)
-- `-p`, `--path` (upload)
-- `-t`, `--target` (shorten)
+Install completion:
 
-## Config
+```bash
+swush completion install
+```
 
-Saved config is stored at:
+Manual script output:
 
-- macOS/Linux: `~/.swush/config.json`
+```bash
+swush completion script --shell zsh
+```
 
-Environment fallback:
+Autocomplete includes:
 
-- `SWUSH_URL` or `APP_URL` for the base URL
+- command and subcommand suggestions
+- flag suggestions
+- history-weighted suggestions
+- context-aware inputs (recent files, recent URLs, clipboard URL for bookmark add)
+
+## Security Notes
+
+- Tokens are never stored in plaintext config.
+- Primary storage uses OS credential store (macOS Keychain / Linux Secret Service).
+- If no OS store is available, encrypted local fallback is used.
+- Config file integrity is signed and verified.
+- Device fingerprint binding is checked on each protected command.
+
+## Config Location
+
+- Default: `~/.swush`
+- Override (useful in CI/sandbox): `SWUSH_CONFIG_HOME=/custom/path`
+
+## Global Flags
+
+- `--help`, `-h`
+- `--version`, `-v`
+- `--no-color`
+- `--json`
 
 ## License
 
